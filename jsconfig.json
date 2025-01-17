@@ -5,5 +5,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["next-env.d.js", "**/*.js", "**/*.jsx"]
 }
