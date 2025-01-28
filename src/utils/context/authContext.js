@@ -2,14 +2,16 @@
 
 'use client';
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { firebase } from '@/utils/client';
+import { auth } from '@/utils/client';
+import { onAuthStateChanged } from 'firebase/auth';
+import PropTypes from 'prop-types';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const AuthContext = createContext();
 
 AuthContext.displayName = 'AuthContext'; // Context object accepts a displayName string property. React DevTools uses this string to determine what to display for the context. https://reactjs.org/docs/context.html#contextdisplayname
 
-function AuthProvider(props) {
+function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   // there are 3 states for the user:
@@ -18,13 +20,15 @@ function AuthProvider(props) {
   // an object/value = user is logged in
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((fbUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
       if (fbUser) {
         setUser(fbUser);
       } else {
         setUser(false);
       }
-    }); // creates a single global listener for auth state changed
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const value = useMemo(
@@ -38,8 +42,13 @@ function AuthProvider(props) {
     [user],
   );
 
-  return <AuthContext.Provider value={value} {...props} />;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 const AuthConsumer = AuthContext.Consumer;
 
 const useAuth = () => {
@@ -51,4 +60,4 @@ const useAuth = () => {
   return context;
 };
 
-export { AuthProvider, useAuth, AuthConsumer };
+export { AuthConsumer, AuthProvider, useAuth };
