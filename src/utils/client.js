@@ -10,6 +10,7 @@ const clientCredentials = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  databaseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 };
 
 // Initialize Firebase
@@ -19,4 +20,4 @@ const app = initializeApp(clientCredentials);
 const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 const auth = getAuth(app);
 
-export { analytics, app, auth };
+export { analytics, app, auth, clientCredentials };
