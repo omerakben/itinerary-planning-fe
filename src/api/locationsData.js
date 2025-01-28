@@ -2,10 +2,10 @@ import { clientCredentials } from '@/utils/client';
 
 const endpoint = clientCredentials.databaseURL;
 
-// Get all trips by user
-const getTrips = (uid) => 
+// Get all locations by user
+const getLocations = (uid) => 
   new Promise((resolve, reject) => {
-    fetch(`${endpoint}/trips?orderBy="uid"&equalTo="${uid}"`, {
+    fetch(`${endpoint}/locations?orderBy="uid"&equalTo="${uid}"`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -22,4 +22,4 @@ const getTrips = (uid) =>
       .catch(reject);
   });
 
-export default getTrips;
+export default getLocations;
