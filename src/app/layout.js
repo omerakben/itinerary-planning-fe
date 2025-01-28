@@ -1,9 +1,7 @@
+import '@/styles/globals.css';
+import ClientProvider from '@/utils/context/ClientProvider';
 import { Inter } from 'next/font/google';
 import PropTypes from 'prop-types';
-import ClientProvider from '@/utils/context/ClientProvider';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@/styles/globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({ children }) {
