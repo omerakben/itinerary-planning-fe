@@ -2,10 +2,10 @@ import { clientCredentials } from '@/utils/client';
 
 const endpoint = clientCredentials.databaseURL;
 
-// Get all trips by user
-const getTrips = (uid) => 
+// Get all trips
+const getTrips = () => 
   new Promise((resolve, reject) => {
-    fetch(`${endpoint}/trips?orderBy="uid"&equalTo="${uid}"`, {
+    fetch(`${endpoint}/trips`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -22,4 +22,24 @@ const getTrips = (uid) =>
       .catch(reject);
   });
 
-export default getTrips;
+// Get single trip
+const getSingleTrip = (id) =>
+  new Promise ((resolve, reject) => {
+    fetch(`${endpoint}/trips/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          resolve(Object.values(data))
+        } else {
+          resolve([]);
+        }
+      })
+      .catch(reject);
+  });
+
+export { getTrips, getSingleTrip };
