@@ -6,6 +6,7 @@ import { auth } from '@/utils/client';
 import { onAuthStateChanged } from 'firebase/auth';
 import PropTypes from 'prop-types';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { getUserProfile } from '../auth';
 
 const AuthContext = createContext();
 
@@ -13,6 +14,8 @@ AuthContext.displayName = 'AuthContext'; // Context object accepts a displayName
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   // there are 3 states for the user:
   // null = application initial state, not yet loaded
@@ -20,44 +23,58 @@ function AuthProvider({ children }) {
   // an object/value = user is logged in
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
-      if (fbUser) {
-        setUser(fbUser);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          // Get user profile from backend
+          const profile = await getUserProfile(firebaseUser.uid);
+          setUser({ ...firebaseUser, profile });
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+          setUser(firebaseUser);
+        }
       } else {
-        setUser(false);
+        setUser(null);
       }
+      setLoading(false);
+      setInitialLoad(false);
     });
 
-    return () => unsubscribe();
+    // Set a timeout to handle very first load
+    const timeout = setTimeout(() => {
+      setInitialLoad(false);
+    }, 1000); // Wait for 1 second max on initial load
+
+    return () => {
+      unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
   const value = useMemo(
-    // https://reactjs.org/docs/hooks-reference.html#usememo
     () => ({
       user,
-      userLoading: user === null,
-      // as long as user === null, will be true
-      // As soon as the user value !== null, value will be false
+      loading: loading && !initialLoad, // Only show loading after initial auth check
+      initialLoad,
     }),
-    [user],
+    [user, loading, initialLoad],
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  // Show children immediately if we're not in initial load
+  // This allows SignIn to show immediately while still checking auth
+  return <AuthContext.Provider value={value}>{!initialLoad && children}</AuthContext.Provider>;
 }
 
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const AuthConsumer = AuthContext.Consumer;
-
-const useAuth = () => {
+function useAuth() {
   const context = useContext(AuthContext);
-
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};
+}
 
-export { AuthConsumer, AuthProvider, useAuth };
+export { AuthProvider, useAuth };
