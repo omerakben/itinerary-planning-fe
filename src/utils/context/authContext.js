@@ -22,6 +22,15 @@ function AuthProvider({ children }) {
   // false = user is not logged in, but the app has loaded
   // an object/value = user is logged in
 
+  const updateUserProfile = (profile) => {
+    if (user) {
+      setUser((currentUser) => ({
+        ...currentUser,
+        profile,
+      }));
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
@@ -56,6 +65,7 @@ function AuthProvider({ children }) {
       user,
       loading: loading && !initialLoad, // Only show loading after initial auth check
       initialLoad,
+      updateUserProfile,
     }),
     [user, loading, initialLoad],
   );
