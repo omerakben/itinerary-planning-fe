@@ -22,7 +22,8 @@ const createOrUpdateUser = async (user, profileData) => {
       throw new Error('Failed to create user profile');
     }
 
-    return await response.json();
+    const updatedProfile = await response.json();
+    return updatedProfile;
   } catch (error) {
     console.error('Error creating user profile:', error);
     throw error;
