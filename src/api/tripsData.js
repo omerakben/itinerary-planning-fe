@@ -32,13 +32,7 @@ const getSingleTrip = (id) =>
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          resolve(Object.values(data))
-        } else {
-          resolve([]);
-        }
-      })
+      .then((data) => resolve((data)))
       .catch(reject);
   });
 
@@ -61,7 +55,7 @@ const createTrip = (payload) =>
 const updateTrip = (payload) => 
   new Promise ((resolve, reject) => {
     fetch(`${endpoint}/trips/${payload.id}`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
