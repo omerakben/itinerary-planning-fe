@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { getSingleTrip } from '@/api/tripsData';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 export default function ViewTrip({ params }) {
   const [tripDetails, setTripDetails] = useState({});
@@ -12,7 +12,6 @@ export default function ViewTrip({ params }) {
     getSingleTrip(id).then(setTripDetails);
   }, [id]);
 
-  console.warn('tripDetails', tripDetails);
   return (
     <div>
       {/* The ? checks if the user exists before attempting to get the bio, to return undefined instead of an error; ex: tripDetails.user?.bio */}
@@ -20,11 +19,12 @@ export default function ViewTrip({ params }) {
       <h1>From: {tripDetails.start_date}</h1>
       <h1>Until: {tripDetails.end_date}</h1>
       <h1>{tripDetails.mode_of_travel?.type_of_travel}</h1>
-      <h1>{tripDetails.number_of_travelers} travelers: {tripDetails.people_on_trip}</h1>
+      <h1>
+        {tripDetails.number_of_travelers} travelers: {tripDetails.people_on_trip}
+      </h1>
       <h1>{tripDetails.notes}</h1>
-      
     </div>
-  )
+  );
 }
 
 ViewTrip.propTypes = {

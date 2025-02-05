@@ -1,9 +1,10 @@
 'use client';
 
-import { createTrip } from '@/api/tripsData';
+import { createTrip, updateTrip } from '@/api/tripsData';
 import { useAuth } from '@/utils/context/authContext';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 const initialState = {
   destination: '',
@@ -22,11 +23,15 @@ const travelModes = [
   { id: 4, type: 'Walking' },
 ];
 
-export default function TripForm() {
-  const [formInput, setFormInput] = useState(initialState);
+export default function TripForm({ obj = initialState }) {
+  const [formInput, setFormInput] = useState(obj);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
+
+  useEffect(() => {
+    if (obj.id) setFormInput(obj);
+  }, [obj]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,19 +44,29 @@ export default function TripForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    try {
+    if (obj.id) {
       const payload = {
         ...formInput,
         uid: user.uid,
         mode_of_travel_id: Number(formInput.mode_of_travel_id),
         number_of_travelers: Number(formInput.number_of_travelers),
       };
+      updateTrip(payload).then(() => router.push(`/trips/${obj.id}`));
+    } else {
+      try {
+        const payload = {
+          ...formInput,
+          uid: user.uid,
+          mode_of_travel_id: Number(formInput.mode_of_travel_id),
+          number_of_travelers: Number(formInput.number_of_travelers),
+        };
 
-      await createTrip(payload);
-      router.push('/trips');
-    } catch (error) {
-      console.error('Error creating trip:', error);
-      setLoading(false);
+        await createTrip(payload);
+        router.push('/trips');
+      } catch (error) {
+        console.error('Error creating trip:', error);
+        setLoading(false);
+      }
     }
   };
 
@@ -135,3 +150,7 @@ export default function TripForm() {
     </div>
   );
 }
+
+TripForm.propTypes = {
+  obj: PropTypes.objectOf({}),
+};
