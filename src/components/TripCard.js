@@ -10,7 +10,8 @@ export default function TripCard({ trip, onView, onUpdate }) {
   const router = useRouter();
 
   // Format dates from the backend (stored as YYYY-MM-DD)
-  const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
+  // FIXME: toLocaleDateString() is returning the day before for some reason
+  // const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
 
   const deleteThisTrip = async () => {
     if (window.confirm('Delete this trip?')) {
@@ -30,7 +31,7 @@ export default function TripCard({ trip, onView, onUpdate }) {
       </div>
       <div className="text-muted-foreground space-y-2">
         <p>
-          <span className="font-medium">Dates:</span> {formatDate(trip.start_date)} - {formatDate(trip.end_date)}
+          <span className="font-medium">Dates:</span> {trip.start_date} - {trip.end_date}
         </p>
         <p>
           <span className="font-medium">Travel Mode:</span> {trip.mode_of_travel?.type_of_travel || 'Not specified'}

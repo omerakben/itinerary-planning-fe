@@ -16,6 +16,7 @@ const initialState = {
   notes: '',
 };
 
+// TODO: Add API calls for mode of travel
 const travelModes = [
   { id: 1, type: 'Plane' },
   { id: 2, type: 'Train' },
@@ -69,7 +70,7 @@ export default function TripForm({ obj = initialState }) {
       }
     }
   };
-
+  console.log(formInput);
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Create New Trip</h1>
