@@ -49,7 +49,7 @@ export default function TripCard({ trip, onView, onUpdate }) {
           View Details
         </Link>
         <div className="flex space-x-2">
-          <button type="button" onClick={() => router.push(`/trips/${trip.id}/edit`)} className="px-3 py-1 bg-secondary/10 text-secondary-foreground rounded hover:bg-secondary/20 transition-colors duration-200">
+          <button type="button" onClick={() => router.push(`/trips/edit/${trip.id}`)} className="px-3 py-1 bg-secondary/10 text-secondary-foreground rounded hover:bg-secondary/20 transition-colors duration-200">
             Edit
           </button>
           <button type="button" onClick={deleteThisTrip} className="px-3 py-1 bg-destructive/10 text-destructive rounded hover:bg-destructive/20 transition-colors duration-200">
