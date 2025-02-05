@@ -17,8 +17,8 @@ export default function NavBar() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      // Implement search functionality
-      console.log('Searching for:', searchTerm);
+      router.push(`/trips?search=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm('');
     }
   };
 
