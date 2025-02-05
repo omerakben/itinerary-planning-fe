@@ -1,7 +1,7 @@
 'use client';
 
 // External imports should come first
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 // Internal imports
@@ -14,8 +14,18 @@ import { useAuth } from '../../utils/context/authContext';
 export default function MyItineraries() {
   const { user, loading } = useAuth();
   const [trips, setTrips] = useState([]);
+  const [filteredTrips, setFilteredTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Function to filter trips based on search term
+  const filterTrips = (tripsData, searchTerm) => {
+    if (!searchTerm) return tripsData;
+
+    const search = searchTerm.toLowerCase();
+    return tripsData.filter((trip) => trip.destination.toLowerCase().includes(search) || trip.people_on_trip?.toLowerCase().includes(search) || trip.notes?.toLowerCase().includes(search) || trip.mode_of_travel?.type_of_travel.toLowerCase().includes(search));
+  };
 
   // Load trips when user is authenticated
   const loadTrips = async () => {
@@ -23,26 +33,40 @@ export default function MyItineraries() {
       if (user?.uid) {
         const tripsData = await getTrips();
         setTrips(tripsData);
+
+        // Get search term from URL
+        const currentSearchTerm = searchParams.get('search');
+        setFilteredTrips(filterTrips(tripsData, currentSearchTerm));
       } else {
         setTrips([]);
+        setFilteredTrips([]);
       }
     } catch (error) {
       console.error('Error loading trips:', error);
       setTrips([]);
+      setFilteredTrips([]);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Initial load of trips
   useEffect(() => {
     if (!loading) {
       loadTrips();
     }
   }, [user, loading]);
 
-  // Function to handle trip updates (including deletion)
-  const handleTripUpdate = () => {
-    loadTrips(); // Reload the trips list
+  // Update filtered trips when search parameter changes
+  useEffect(() => {
+    const currentSearchTerm = searchParams.get('search');
+    setFilteredTrips(filterTrips(trips, currentSearchTerm));
+  }, [searchParams, trips]);
+
+  const handleClearSearch = () => {
+    router.push('/trips');
+    window.history.replaceState({}, '', '/trips');
+    setFilteredTrips(trips);
   };
 
   // Show loading spinner while authentication or data is loading
@@ -56,29 +80,50 @@ export default function MyItineraries() {
     return null;
   }
 
+  const currentSearchTerm = searchParams.get('search');
+
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
         <div className="flex justify-between items-center bg-white/60 backdrop-blur-md rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-white/20">
-          <h1 className="text-2xl font-bold text-gray-900">My Itineraries</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">My Itineraries</h1>
+            {currentSearchTerm && (
+              <p className="text-sm text-gray-600 mt-1">
+                Search results for: &quot;{currentSearchTerm}&quot;
+                <button type="button" onClick={handleClearSearch} className="ml-2 text-blue-600 hover:text-blue-800 border border-blue-600 rounded-md px-2 py-1">
+                  Clear search
+                </button>
+              </p>
+            )}
+          </div>
           <button type="button" onClick={() => router.push('/trips/new')} className="create-final-button">
             Create New Trip
           </button>
         </div>
 
-        {trips.length === 0 ? (
+        {filteredTrips.length === 0 ? (
           <div className="bg-white/60 backdrop-blur-md rounded-xl p-8 text-center shadow-lg border border-white/20">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">No Itineraries Yet</h2>
-            <p className="text-gray-600 mb-6">Start planning your next adventure by creating a new trip!</p>
+            {currentSearchTerm ? (
+              <>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">No Matching Itineraries Found</h2>
+                <p className="text-gray-600 mb-6">Try adjusting your search terms or create a new trip.</p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">No Itineraries Yet</h2>
+                <p className="text-gray-600 mb-6">Start planning your next adventure by creating a new trip!</p>
+              </>
+            )}
             <button type="button" onClick={() => router.push('/trips/new')} className="create-final-button">
               Plan Your First Trip
             </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trips.map((trip) => (
-              <TripCard key={trip.id} trip={trip} onView={() => router.push(`/trips/${trip.id}`)} onUpdate={handleTripUpdate} />
+            {filteredTrips.map((trip) => (
+              <TripCard key={trip.id} trip={trip} onView={() => router.push(`/trips/${trip.id}`)} onUpdate={loadTrips} />
             ))}
           </div>
         )}
