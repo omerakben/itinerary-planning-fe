@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 // Internal imports
-import { getTrips } from '@/api/tripsData';
-import ProfileSetup from '@/components/ProfileSetup';
-import SignIn from '@/components/SignIn';
-import { useAuth } from '@/utils/context/authContext';
+import { getTrips } from '../api/tripsData';
+import Loading from '../components/Loading';
+import ProfileSetup from '../components/ProfileSetup';
+import SignIn from '../components/SignIn';
+import { useAuth } from '../utils/context/authContext';
 
 function Home() {
   const { user, loading } = useAuth();
@@ -42,11 +43,7 @@ function Home() {
 
   // Show loading spinner only during initial auth check
   if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
-      </div>
-    );
+    return <Loading />;
   }
 
   // If authenticated but no profile, show profile setup
@@ -69,13 +66,13 @@ function Home() {
 
   // Main app content
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-32">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
         <div className="flex justify-between items-center bg-white/60 backdrop-blur-md rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-white/20">
           <h1 className="text-2xl font-bold text-gray-900">Welcome back, {user.profile?.name || user.displayName}!</h1>
-          <button type="button" onClick={handleCreateTrip} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button type="button" onClick={handleCreateTrip} className="create-final-button">
+            <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             Create New Trip

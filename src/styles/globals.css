@@ -429,68 +429,16 @@
     }
   }
 
-  /* Final Create Button with Special Border */
+  /* Final Create Button */
   .create-final-button {
-    position: relative;
-    z-index: 0;
-    padding: 0.75rem 1.5rem;
-    background: rgba(59, 130, 246, 0.9);
-    color: white;
-    font-weight: 500;
-    border-radius: 1rem;
-    transition: all 0.3s ease;
-  }
-
-  .create-final-button::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset: -2px;
-    border-radius: 1rem;
-    background: linear-gradient(90deg, #fb3d3d, #ff3366, #ff0099, #cc00ff, #9900ff, #ff0099, #ff3366, #ff0000);
-    background-size: 200% 200%;
-    animation: borderRotate 4s linear infinite;
-  }
-
-  .create-final-button::after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    inset: 2px;
-    background: rgba(59, 130, 246, 0.9);
-    border-radius: 0.9rem;
-    transition: all 0.3s ease;
-  }
-
-  .create-final-button:hover::before {
-    animation: borderRotate 2s linear infinite;
-  }
-
-  .create-final-button:hover::after {
-    background: rgba(59, 130, 246, 0.95);
+    @apply relative z-0 px-4 py-2 bg-blue-500 text-white font-medium rounded-lg transition-all duration-300 ease-in-out;
   }
 
   .create-final-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 5px 15px rgba(255, 0, 150, 0.3);
+    @apply transform -translate-y-1 shadow-lg;
   }
 
   .create-final-button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .create-final-button:disabled::before {
-    animation: none;
-  }
-
-  @keyframes borderRotate {
-    0% {
-      background-position: 0% 50%;
-    }
-    100% {
-      background-position: 200% 50%;
-    }
+    @apply opacity-70 cursor-not-allowed;
   }
 }

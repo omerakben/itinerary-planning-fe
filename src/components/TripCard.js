@@ -1,51 +1,78 @@
 'use client';
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import Link from 'next/link';
-import { deleteTrip } from '@/api/tripsData';
+import { useRouter } from 'next/navigation';
+import PropTypes from 'prop-types';
+import { deleteTrip } from '../api/tripsData';
 
-export default function TripCard({ tripObj, onUpdate }) {
-  const deleteThisTrip = () => {
+// Component for displaying individual trip information in a card format
+export default function TripCard({ trip, onView, onUpdate }) {
+  const router = useRouter();
+
+  // Format dates from the backend (stored as YYYY-MM-DD)
+  const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
+
+  const deleteThisTrip = async () => {
     if (window.confirm('Delete this trip?')) {
-      deleteTrip(tripObj.id).then(() => onUpdate());
+      try {
+        await deleteTrip(trip.id);
+        onUpdate(); // Update parent state instead of navigating
+      } catch (error) {
+        console.error('Error deleting trip:', error);
+      }
     }
   };
 
-  
   return (
-    <Card style={{ width: '18rem', margin: '10px' }}>
-      <Card.Body>
-        <Card.Title><h1>{tripObj.destination}</h1></Card.Title>
-        <Card.Text>
-          <p>{tripObj.start_date} to {tripObj.end_date}</p>
-          <p>{tripObj.number_of_travelers} travelers</p>
-          <p>Mode of travel: {tripObj.mode_of_travel.type_of_travel}</p>
-        </Card.Text>
-      </Card.Body>
-      <Link href={`/trips/${tripObj.id}`} passHref>
-        <Button variant="primary">View</Button>
-      </Link>
-      <Button variant="danger" onClick={deleteThisTrip}>Delete</Button>
-    </Card>
-  )
+    <div className="bg-card/80 backdrop-blur-sm rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-200">
+      <div className="mb-4">
+        <h3 className="text-xl font-semibold text-card-foreground">{trip.destination}</h3>
+      </div>
+      <div className="text-muted-foreground space-y-2">
+        <p>
+          <span className="font-medium">Dates:</span> {formatDate(trip.start_date)} - {formatDate(trip.end_date)}
+        </p>
+        <p>
+          <span className="font-medium">Travel Mode:</span> {trip.mode_of_travel?.type_of_travel || 'Not specified'}
+        </p>
+        <p>
+          <span className="font-medium">Travelers:</span> {trip.number_of_travelers}
+        </p>
+        {trip.notes && (
+          <p>
+            <span className="font-medium">Notes:</span> {trip.notes}
+          </p>
+        )}
+      </div>
+      <div className="mt-4 flex justify-between items-center">
+        <Link href={`/trips/${trip.id}`} onClick={onView} className="px-3 py-1 bg-primary/10 text-primary rounded hover:bg-primary/20 transition-colors duration-200">
+          View Details
+        </Link>
+        <div className="flex space-x-2">
+          <button type="button" onClick={() => router.push(`/trips/${trip.id}/edit`)} className="px-3 py-1 bg-secondary/10 text-secondary-foreground rounded hover:bg-secondary/20 transition-colors duration-200">
+            Edit
+          </button>
+          <button type="button" onClick={deleteThisTrip} className="px-3 py-1 bg-destructive/10 text-destructive rounded hover:bg-destructive/20 transition-colors duration-200">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 TripCard.propTypes = {
-  tripObj: PropTypes.shape({
-    id: PropTypes.number,
-    user: PropTypes.number,
-    destination: PropTypes.string,
-    start_date: PropTypes.string,
-    end_date: PropTypes.string,
-    mode_of_travel: PropTypes.number,
-    number_of_travelers: PropTypes.number,
-    people_on_trip: PropTypes.string,
+  trip: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    destination: PropTypes.string.isRequired,
+    start_date: PropTypes.string.isRequired,
+    end_date: PropTypes.string.isRequired,
+    mode_of_travel: PropTypes.shape({
+      type_of_travel: PropTypes.string,
+    }),
+    number_of_travelers: PropTypes.number.isRequired,
     notes: PropTypes.string,
-    created_at: PropTypes.string,
-    updated_at: PropTypes.string,
   }).isRequired,
+  onView: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
 };
