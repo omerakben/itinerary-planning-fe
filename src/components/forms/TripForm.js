@@ -16,6 +16,7 @@ const initialState = {
   notes: '',
 };
 
+// TODO: Add API calls for mode of travel
 const travelModes = [
   { id: 1, type: 'Plane' },
   { id: 2, type: 'Train' },
@@ -103,7 +104,7 @@ export default function TripForm({ obj = initialState }) {
           <label htmlFor="mode_of_travel_id" className="block text-sm font-medium text-gray-700 mb-1">
             Mode of Travel
           </label>
-          <select id="mode_of_travel_id" name="mode_of_travel_id" value={formInput.mode_of_travel_id} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary">
+          <select id="mode_of_travel_id" name="mode_of_travel_id" value={obj.id ? obj.mode_of_travel.id : formInput.mode_of_travel_id} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary">
             <option value="">Select travel mode</option>
             {travelModes.map((mode) => (
               <option key={mode.id} value={mode.id}>
