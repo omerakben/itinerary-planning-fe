@@ -10,8 +10,6 @@ export default function TripCard({ trip, onView, onUpdate }) {
   const router = useRouter();
 
   // Format dates from the backend (stored as YYYY-MM-DD)
-  // FIXME: toLocaleDateString() is returning the day before for some reason
-  // const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
 
   const deleteThisTrip = async () => {
     if (window.confirm('Delete this trip?')) {
