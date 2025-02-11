@@ -3,8 +3,8 @@
 import { createTrip, updateTrip } from '@/api/tripsData';
 import { useAuth } from '@/utils/context/authContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 
 const initialState = {
   destination: '',
@@ -88,13 +88,13 @@ export default function TripForm({ obj = initialState }) {
             <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-1">
               Start Date
             </label>
-            <input type="date" id="start_date" name="start_date" value={formInput.start_date} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary" />
+            <input type="date" id="start_date" name="start_date" value={formInput.start_date} onChange={handleChange} min={new Date().toISOString().split('T')[0]} max={formInput.end_date || undefined} required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary" />
           </div>
           <div>
             <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 mb-1">
               End Date
             </label>
-            <input type="date" id="end_date" name="end_date" value={formInput.end_date} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary" />
+            <input type="date" id="end_date" name="end_date" value={formInput.end_date} onChange={handleChange} min={formInput.start_date || new Date().toISOString().split('T')[0]} required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary" />
           </div>
         </div>
 
