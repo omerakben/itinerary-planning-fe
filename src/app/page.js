@@ -52,7 +52,12 @@ function Home() {
   }
 
   // Calculate quick stats
-  const upcomingTrips = trips.filter((trip) => new Date(trip.start_date) > new Date()).length;
+  const upcomingTrips = trips.filter((trip) => {
+    const startDate = new Date(trip.start_date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return startDate >= today;
+  }).length;
 
   const handleCreateTrip = () => {
     router.push('/trips/new');
