@@ -166,8 +166,59 @@ export default function TripForm({ obj = initialState }) {
               {!obj.id && !loading ? 'Create Trip' : ''}
             </button>
           </div>
-        </form>
-      </div>
+        </div>
+
+        {/* Travel Mode */}
+        <div>
+          <label htmlFor="mode_of_travel_id" className="block text-sm font-medium text-gray-700 mb-1">
+            Mode of Travel
+          </label>
+          <select id="mode_of_travel_id" name="mode_of_travel_id" value={formInput.mode_of_travel_id} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary">
+            <option value="">Select travel mode</option>
+            {travelModes.map((mode) => (
+              <option key={mode.id} value={mode.id} selected={formInput.mode_of_travel_id === mode.id}>
+                {mode.type}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Number of Travelers */}
+        <div>
+          <label htmlFor="number_of_travelers" className="block text-sm font-medium text-gray-700 mb-1">
+            Number of Travelers
+          </label>
+          <input type="number" id="number_of_travelers" name="number_of_travelers" value={formInput.number_of_travelers} onChange={handleChange} required min="1" className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary" />
+        </div>
+
+        {/* People on Trip */}
+        <div>
+          <label htmlFor="people_on_trip" className="block text-sm font-medium text-gray-700 mb-1">
+            People on Trip
+          </label>
+          <input type="text" id="people_on_trip" name="people_on_trip" value={formInput.people_on_trip} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Enter names of travelers" />
+        </div>
+
+        {/* Notes */}
+        <div>
+          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
+            Notes
+          </label>
+          <textarea id="notes" name="notes" value={formInput.notes} onChange={handleChange} rows="3" className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Add any notes about the trip" />
+        </div>
+
+        {/* Submit Button */}
+        <div className="flex justify-end space-x-4">
+          <button type="button" onClick={() => router.push('/trips')} className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+            Cancel
+          </button>
+          <button type="submit" disabled={loading} className="neon-button">
+            {loading ? 'Creating...' : ''}
+            {obj.id && !loading ? 'Done' : ''}
+            {!obj.id && !loading ? 'Create Trip' : ''}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
