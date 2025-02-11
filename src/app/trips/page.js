@@ -1,11 +1,13 @@
 'use client';
 
 // External imports should come first
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 // Internal imports
 import { getTrips } from '../../api/tripsData';
+import { PlusIcon } from '../../components/Icons';
 import Loading from '../../components/Loading';
 import TripCard from '../../components/TripCard';
 import { useAuth } from '../../utils/context/authContext';
@@ -83,7 +85,7 @@ export default function MyItineraries() {
   const currentSearchTerm = searchParams.get('search');
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-32">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
         <div className="flex justify-between items-center bg-white/60 backdrop-blur-md rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-white/20">
@@ -99,26 +101,30 @@ export default function MyItineraries() {
             )}
           </div>
           <button type="button" onClick={() => router.push('/trips/new')} className="create-final-button">
-            Create New Trip
+            <PlusIcon className="w-5 h-5 inline-block mr-2" />
+            Create Trip
           </button>
         </div>
 
         {filteredTrips.length === 0 ? (
-          <div className="bg-white/60 backdrop-blur-md rounded-xl p-8 text-center shadow-lg border border-white/20">
+          <div className="bg-white/60 backdrop-blur-md rounded-xl p-12 text-center shadow-lg border border-white/20">
             {currentSearchTerm ? (
-              <>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">No Matching Itineraries Found</h2>
-                <p className="text-gray-600 mb-6">Try adjusting your search terms or create a new trip.</p>
-              </>
+              <div className="flex flex-col items-center justify-center">
+                <Image src="/logo.png" alt="No Results" width={80} height={80} className="mb-4 opacity-80" />
+                <h2 className="text-2xl font-semibold text-gray-900 mb-2">No Matching Itineraries Found</h2>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto">Try adjusting your search terms or start planning a new adventure!</p>
+              </div>
             ) : (
-              <>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">No Itineraries Yet</h2>
-                <p className="text-gray-600 mb-6">Start planning your next adventure by creating a new trip!</p>
-              </>
+              <div className="flex flex-col items-center justify-center">
+                <Image src="/logo.png" alt="Start Planning" width={80} height={80} className="mb-4 opacity-80" />
+                <h2 className="text-2xl font-semibold text-gray-900 mb-2">No Itineraries Yet</h2>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto">Your journey begins here! Start planning your next adventure by creating a new trip.</p>
+                <button type="button" onClick={() => router.push('/trips/new')} className="neon-button flex items-center space-x-2">
+                  <PlusIcon className="w-5 h-5" />
+                  <span>Create Your First Trip</span>
+                </button>
+              </div>
             )}
-            <button type="button" onClick={() => router.push('/trips/new')} className="create-final-button">
-              Plan Your First Trip
-            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

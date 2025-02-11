@@ -1,11 +1,13 @@
 'use client';
 
 // External packages first
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 // Internal imports
 import { getTrips } from '../api/tripsData';
+import { PlusIcon } from '../components/Icons';
 import Loading from '../components/Loading';
 import ProfileSetup from '../components/ProfileSetup';
 import SignIn from '../components/SignIn';
@@ -52,7 +54,12 @@ function Home() {
   }
 
   // Calculate quick stats
-  const upcomingTrips = trips.filter((trip) => new Date(trip.start_date) > new Date()).length;
+  const upcomingTrips = trips.filter((trip) => {
+    const startDate = new Date(trip.start_date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return startDate >= today;
+  }).length;
 
   const handleCreateTrip = () => {
     router.push('/trips/new');
@@ -72,10 +79,8 @@ function Home() {
         <div className="flex justify-between items-center bg-white/60 backdrop-blur-md rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-white/20">
           <h1 className="text-2xl font-bold text-gray-900">Welcome back, {user.profile?.name || user.displayName}!</h1>
           <button type="button" onClick={handleCreateTrip} className="create-final-button">
-            <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Create New Trip
+            <PlusIcon className="w-5 h-5 inline-block mr-2" />
+            Create Trip
           </button>
         </div>
 
@@ -129,10 +134,8 @@ function Home() {
               <p className="mt-1 text-sm text-gray-500">Get started by creating a new trip.</p>
               <div className="mt-6">
                 <button type="button" onClick={handleCreateTrip} className="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors">
-                  <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  Create New Trip
+                  <PlusIcon className="w-5 h-5 mr-2" />
+                  Create Trip
                 </button>
               </div>
             </div>
@@ -140,21 +143,39 @@ function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {trips.slice(0, 3).map((trip) => (
                 <button key={trip.id} type="button" onClick={() => router.push(`/trips/${trip.id}`)} className="text-left relative bg-white/70 backdrop-blur-md rounded-lg p-6 hover:shadow-xl transition-all w-full hover:bg-white/80 border border-white/20">
-                  <div className="space-y-3">
-                    <h3 className="text-lg font-medium text-gray-900">{trip.destination}</h3>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <svg className="mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {new Date(trip.start_date).toLocaleDateString()}
+                  <div className="mb-4">
+                    <div className="flex items-start justify-between">
+                      <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">{trip.destination}</h3>
+                      <Image src="/svg/card-location.svg" alt="Location" width={24} height={24} className="text-gray-500" />
                     </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <svg className="mr-1.5 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      {getTravelModeDisplay(trip.mode_of_travel)}
+                  </div>
+
+                  <div className="space-y-3 text-gray-600">
+                    {/* Dates with calendar icon */}
+                    <div className="flex items-center space-x-2">
+                      <Image src="/svg/card-calendar.svg" alt="Calendar" width={20} height={20} />
+                      <span>{new Date(trip.start_date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
                     </div>
+
+                    {/* Travel Mode */}
+                    <div className="flex items-center space-x-2">
+                      <Image src="/svg/card-travel-mode.svg" alt="Travel Mode" width={20} height={20} />
+                      <span>{getTravelModeDisplay(trip.mode_of_travel)}</span>
+                    </div>
+
+                    {/* Travelers */}
+                    <div className="flex items-center space-x-2">
+                      <Image src="/svg/card-travelers.svg" alt="Travelers" width={20} height={20} />
+                      <span>{trip.number_of_travelers} travelers</span>
+                    </div>
+
+                    {/* Notes */}
+                    {trip.notes && (
+                      <div className="flex items-start space-x-2">
+                        <Image src="/svg/card-notes.svg" alt="Notes" width={20} height={20} className="mt-1" />
+                        <p className="text-sm line-clamp-2">{trip.notes}</p>
+                      </div>
+                    )}
                   </div>
                 </button>
               ))}

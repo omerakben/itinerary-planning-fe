@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { getSingleTrip } from '@/api/tripsData';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function ViewTrip({ params }) {
   const [tripDetails, setTripDetails] = useState({});

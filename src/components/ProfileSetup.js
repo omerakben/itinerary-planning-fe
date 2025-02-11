@@ -34,33 +34,44 @@ function ProfileSetup({ user, onComplete }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-100 to-blue-100">
-      <div className="flex flex-col justify-center items-center min-h-screen p-8">
-        <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+    <div className="min-h-screen p-32">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-8 shadow-lg hover:shadow-xl transition-all border border-white/20">
+          {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Complete Your Profile</h1>
-            <p className="text-gray-600">Tell us a little about yourself</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Complete Your Profile</h1>
+            <p className="text-gray-600">Tell us about yourself to get started with Itinerary Planner</p>
           </div>
 
           {error && <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">{error}</div>}
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Input */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                 Name
               </label>
-              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter your name" />
+              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50" placeholder="Enter your full name" />
             </div>
 
+            {/* Bio Input */}
             <div>
               <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
                 Bio
               </label>
-              <textarea id="bio" name="bio" value={formData.bio} onChange={handleChange} required rows={4} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Tell us about yourself..." />
+              <textarea id="bio" name="bio" value={formData.bio} onChange={handleChange} required rows={4} className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50" placeholder="Tell us a bit about yourself..." />
             </div>
 
-            <button type="submit" disabled={isLoading} className={`w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-              {isLoading ? 'Saving...' : 'Complete Setup'}
+            {/* Submit Button */}
+            <button type="submit" disabled={isLoading} className="w-full create-final-button disabled:opacity-50 disabled:cursor-not-allowed">
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin mr-2" />
+                  Setting Up...
+                </div>
+              ) : (
+                'Complete Setup'
+              )}
             </button>
           </form>
         </div>
