@@ -144,7 +144,7 @@ export default function TripForm({ obj = initialState }) {
           </button>
           <button type="submit" disabled={loading} className="neon-button">
             {loading ? 'Creating...' : ''}
-            {obj.id && !loading ? 'Edit Trip' : ''}
+            {obj.id && !loading ? 'Done' : ''}
             {!obj.id && !loading ? 'Create Trip' : ''}
           </button>
         </div>
