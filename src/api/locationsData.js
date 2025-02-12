@@ -1,9 +1,9 @@
-import { clientCredentials } from '@/utils/client';
+import { clientCredentials } from '../utils/client';
 
 const endpoint = clientCredentials.databaseURL;
 
 // Get all locations
-const getLocations = () => 
+const getLocations = () =>
   new Promise((resolve, reject) => {
     fetch(`${endpoint}/locations`, {
       method: 'GET',
@@ -23,7 +23,7 @@ const getLocations = () =>
   });
 
 // Get single location
-const getSingleLocation = (id) => 
+const getSingleLocation = (id) =>
   new Promise((resolve, reject) => {
     fetch(`${endpoint}/locations/${id}`, {
       method: 'GET',

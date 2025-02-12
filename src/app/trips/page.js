@@ -1,16 +1,21 @@
 'use client';
 
-// External imports should come first
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-// Internal imports
+import { useCallback, useEffect, useState } from 'react';
 import { getTrips } from '../../api/tripsData';
 import { PlusIcon } from '../../components/Icons';
 import Loading from '../../components/Loading';
 import TripCard from '../../components/TripCard';
 import { useAuth } from '../../utils/context/authContext';
+
+// Function to filter trips based on search term
+const filterTrips = (tripsData, searchTerm) => {
+  if (!searchTerm) return tripsData;
+
+  const search = searchTerm.toLowerCase();
+  return tripsData.filter((trip) => trip.destination.toLowerCase().includes(search) || trip.people_on_trip?.toLowerCase().includes(search) || trip.notes?.toLowerCase().includes(search) || trip.mode_of_travel?.type_of_travel.toLowerCase().includes(search));
+};
 
 // Main page component for displaying user's itineraries
 export default function MyItineraries() {
@@ -21,22 +26,11 @@ export default function MyItineraries() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Function to filter trips based on search term
-  const filterTrips = (tripsData, searchTerm) => {
-    if (!searchTerm) return tripsData;
-
-    const search = searchTerm.toLowerCase();
-    return tripsData.filter((trip) => trip.destination.toLowerCase().includes(search) || trip.people_on_trip?.toLowerCase().includes(search) || trip.notes?.toLowerCase().includes(search) || trip.mode_of_travel?.type_of_travel.toLowerCase().includes(search));
-  };
-
-  // Load trips when user is authenticated
-  const loadTrips = async () => {
+  const loadTrips = useCallback(async () => {
     try {
       if (user?.uid) {
         const tripsData = await getTrips();
         setTrips(tripsData);
-
-        // Get search term from URL
         const currentSearchTerm = searchParams.get('search');
         setFilteredTrips(filterTrips(tripsData, currentSearchTerm));
       } else {
@@ -50,14 +44,13 @@ export default function MyItineraries() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user, searchParams]);
 
-  // Initial load of trips
   useEffect(() => {
     if (!loading) {
       loadTrips();
     }
-  }, [user, loading]);
+  }, [loading, loadTrips]);
 
   // Update filtered trips when search parameter changes
   useEffect(() => {

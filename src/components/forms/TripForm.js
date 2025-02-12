@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
-import { createTrip, updateTrip } from '@/api/tripsData';
-import { useAuth } from '@/utils/context/authContext';
+import { createTrip, updateTrip } from '../../api/tripsData';
+import { useAuth } from '../../utils/context/authContext';
 
 const initialState = {
   destination: '',

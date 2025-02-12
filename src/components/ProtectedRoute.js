@@ -1,9 +1,9 @@
 'use client';
 
-import { useAuth } from '@/utils/context/authContext';
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+import { useAuth } from '../utils/context/authContext';
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();

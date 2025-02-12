@@ -1,9 +1,9 @@
 'use client';
 
-import ProtectedRoute from '@/components/ProtectedRoute';
-import { createOrUpdateUser } from '@/utils/auth';
-import { useAuth } from '@/utils/context/authContext';
 import { useEffect, useState } from 'react';
+import ProtectedRoute from '../../components/ProtectedRoute';
+import { createOrUpdateUser } from '../../utils/auth';
+import { useAuth } from '../../utils/context/authContext';
 
 export default function ProfilePage() {
   const { user, loading, updateUserProfile } = useAuth();

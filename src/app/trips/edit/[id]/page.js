@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { getSingleTrip } from '@/api/tripsData';
-import TripForm from '@/components/forms/TripForm';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { getSingleTrip } from '../../../../api/tripsData';
+import TripForm from '../../../../components/forms/TripForm';
 
 export default function EditTrip({ params }) {
   const [editItem, setEditItem] = useState({});
