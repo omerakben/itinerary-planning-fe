@@ -32,65 +32,66 @@ export default function ViewTrip({ params }) {
   };
 
   return (
-    <div className="min-h-screen p-32">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="bg-white/60 backdrop-blur-md rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-white/20">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="flex items-center text-2xl font-semibold text-gray-900">
-              <SuitcaseIcon className="w-6 h-6 mr-2 text-gray-700" />
-              {tripDetails.destination}
+    <div className="min-h-screen p-8 md:p-16 lg:p-32 transition-all">
+      <div className="max-w-7xl mx-auto space-y-4 md:space-y-6">
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-4 md:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all border border-white/20">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <h3 className="flex items-center text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900">
+              <SuitcaseIcon className="w-6 h-6 mr-2 text-gray-700 flex-shrink-0" />
+              <span className="line-clamp-2">{tripDetails.destination}</span>
             </h3>
-            <button type="button" onClick={() => router.push(`/trips/edit/${tripDetails.id}`)} className="neon-button">
+            <button type="button" onClick={() => router.push(`/trips/edit/${tripDetails.id}`)} className="neon-button w-full sm:w-auto">
               Edit Trip
             </button>
           </div>
 
           <div className="mt-6 border-t border-gray-100">
             <dl className="divide-y divide-gray-100">
-              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <div className="py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4">
                 <dt className="flex items-center text-sm font-medium text-gray-900">
-                  <TakeoffIcon className="w-5 h-5 mr-2 text-gray-700" />
+                  <TakeoffIcon className="w-5 h-5 mr-2 text-gray-700 flex-shrink-0" />
                   Arriving
                 </dt>
-                <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">{new Date(tripDetails.start_date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</dd>
+                <dd className="mt-2 sm:mt-0 text-sm text-gray-700 sm:col-span-2">{new Date(tripDetails.start_date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</dd>
               </div>
 
-              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <div className="py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4">
                 <dt className="flex items-center text-sm font-medium text-gray-900">
-                  <LandingIcon className="w-5 h-5 mr-2 text-gray-700" />
+                  <LandingIcon className="w-5 h-5 mr-2 text-gray-700 flex-shrink-0" />
                   Returning
                 </dt>
-                <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">{new Date(tripDetails.end_date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</dd>
+                <dd className="mt-2 sm:mt-0 text-sm text-gray-700 sm:col-span-2">{new Date(tripDetails.end_date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</dd>
               </div>
 
-              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <div className="py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4">
                 <dt className="flex items-center text-sm font-medium text-gray-900">
-                  <LocationIcon className="w-5 h-5 mr-2 text-gray-700" />
+                  <LocationIcon className="w-5 h-5 mr-2 text-gray-700 flex-shrink-0" />
                   Via
                 </dt>
-                <dd className="flex items-center mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
-                  {travelModeIcon(tripDetails.mode_of_travel?.type_of_travel)}
+                <dd className="flex items-center mt-2 sm:mt-0 text-sm text-gray-700 sm:col-span-2">
+                  <div className="w-5 h-5 flex-shrink-0">{travelModeIcon(tripDetails.mode_of_travel?.type_of_travel)}</div>
                   <span className="ml-2">{tripDetails.mode_of_travel?.type_of_travel}</span>
                 </dd>
               </div>
 
-              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+              <div className="py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4">
                 <dt className="flex items-center text-sm font-medium text-gray-900">
-                  <TravelersIcon className="w-5 h-5 mr-2 text-gray-700" />
+                  <TravelersIcon className="w-5 h-5 mr-2 text-gray-700 flex-shrink-0" />
                   Travelers
                 </dt>
-                <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
-                  {tripDetails.number_of_travelers} travelers: {tripDetails.people_on_trip}
+                <dd className="mt-2 sm:mt-0 text-sm text-gray-700 sm:col-span-2">
+                  <span className="font-medium">{tripDetails.number_of_travelers} travelers:</span>
+                  <span className="ml-2">{tripDetails.people_on_trip}</span>
                 </dd>
               </div>
 
               {tripDetails.notes && (
-                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div className="py-4 sm:py-6 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt className="flex items-center text-sm font-medium text-gray-900">
-                    <NotesIcon className="w-5 h-5 mr-2 text-gray-700" />
+                    <NotesIcon className="w-5 h-5 mr-2 text-gray-700 flex-shrink-0" />
                     Notes
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-700 sm:col-span-2 sm:mt-0">{tripDetails.notes}</dd>
+                  <dd className="mt-2 sm:mt-0 text-sm text-gray-700 sm:col-span-2 whitespace-pre-wrap">{tripDetails.notes}</dd>
                 </div>
               )}
             </dl>
