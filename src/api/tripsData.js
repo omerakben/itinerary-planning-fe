@@ -1,9 +1,9 @@
-import { clientCredentials } from '@/utils/client';
+import { clientCredentials } from '../utils/client';
 
 const endpoint = clientCredentials.databaseURL;
 
 // Get all trips in database
-const getTrips = () => 
+const getTrips = () =>
   new Promise((resolve, reject) => {
     fetch(`${endpoint}/trips`, {
       method: 'GET',
@@ -24,7 +24,7 @@ const getTrips = () =>
 
 // Get single trip by trip id
 const getSingleTrip = (id) =>
-  new Promise ((resolve, reject) => {
+  new Promise((resolve, reject) => {
     fetch(`${endpoint}/trips/${id}`, {
       method: 'GET',
       headers: {
@@ -32,13 +32,13 @@ const getSingleTrip = (id) =>
       },
     })
       .then((response) => response.json())
-      .then((data) => resolve((data)))
+      .then((data) => resolve(data))
       .catch(reject);
   });
 
 // Create a trip with a JSON object payload
-const createTrip = (payload) => 
-  new Promise ((resolve, reject) => {
+const createTrip = (payload) =>
+  new Promise((resolve, reject) => {
     fetch(`${endpoint}/trips`, {
       method: 'POST',
       headers: {
@@ -49,11 +49,11 @@ const createTrip = (payload) =>
       .then((response) => response.json())
       .then((data) => resolve(data))
       .catch(reject);
-  })
+  });
 
 // Edit a trip
-const updateTrip = (payload) => 
-  new Promise ((resolve, reject) => {
+const updateTrip = (payload) =>
+  new Promise((resolve, reject) => {
     fetch(`${endpoint}/trips/${payload.id}`, {
       method: 'PUT',
       headers: {
@@ -67,8 +67,8 @@ const updateTrip = (payload) =>
   });
 
 // Delete a trip by trip id
-const deleteTrip = (id) => 
-  new Promise ((resolve, reject) => {
+const deleteTrip = (id) =>
+  new Promise((resolve, reject) => {
     fetch(`${endpoint}/trips/${id}`, {
       method: 'DELETE',
       headers: {
@@ -79,10 +79,4 @@ const deleteTrip = (id) =>
       .catch(reject);
   });
 
-export { 
-  getTrips,
-  getSingleTrip,
-  createTrip,
-  deleteTrip,
-  updateTrip,
-};
+export { createTrip, deleteTrip, getSingleTrip, getTrips, updateTrip };

@@ -2,11 +2,12 @@
 
 'use client';
 
-import { auth } from '@/utils/client';
 import { onAuthStateChanged } from 'firebase/auth';
 import PropTypes from 'prop-types';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+
 import { getUserProfile } from '../auth';
+import { auth } from '../client';
 
 const AuthContext = createContext();
 

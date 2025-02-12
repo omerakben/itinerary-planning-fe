@@ -1,4 +1,4 @@
-import { clientCredentials } from '@/utils/client';
+import { clientCredentials } from '../utils/client';
 
 const endpoint = clientCredentials.databaseURL;
 
@@ -22,4 +22,4 @@ const getUser = (id) =>
       .catch(reject);
   });
 
-  export default getUser;
+export default getUser;

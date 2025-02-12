@@ -1,7 +1,8 @@
-import '@/styles/globals.css';
-import ClientProvider from '@/utils/context/ClientProvider';
+import '../styles/globals.css';
+
 import { Inter } from 'next/font/google';
 import PropTypes from 'prop-types';
+import ClientProvider from '../utils/context/ClientProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
