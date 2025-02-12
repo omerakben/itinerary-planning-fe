@@ -42,7 +42,10 @@ export default function NavBar() {
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center">
               <Image src="/logo.png" alt="Itinerary Planner Logo" width={44} height={44} className="object-contain" priority />
-              <span className="ml-3 text-xl font-bold text-gray-800">Itinerary Planner</span>
+              <span className="ml-3 text-xl font-bold text-gray-800">
+                <span className="hidden lg:inline">Itinerary Planner</span>
+                <span className="lg:hidden">IP</span>
+              </span>
             </Link>
           </div>
 
@@ -65,7 +68,7 @@ export default function NavBar() {
           <div className="hidden md:flex items-center space-x-4">
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="relative">
-              <input type="search" placeholder="Search trips..." className="w-64 px-4 py-1 text-gray-900 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+              <input type="search" placeholder="Search trips..." className="w-48 lg:w-64 px-4 py-1 text-gray-900 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
               <button type="submit" className="absolute right-0 top-0 mt-1 mr-2" aria-label="Search">
                 <SearchIcon className="text-gray-500" />
               </button>
